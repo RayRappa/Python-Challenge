@@ -1,29 +1,38 @@
 import os
-
 import csv
 
-#election_csv = os.path.join("..", "Resources", "election_data.csv")
-election_csv = "Resources\election_data.csv"
 
-list = ["Voter_ID", "county", "candidate"]
-
-print("\nList Items: ")
-print(list[0])
-print(list[1])
-print(list[2])
+input_path = os.path.join('Resources\election_data.csv')
+output_path = os.path.join('Analysis', 'poll_analysis.txt')
 
 
-#Sum of column 1 votes for total votes
+candidate_list = []
+candidate_count = []
+votes=[]
+vote_pct = []
+
+votes = 0
+
+
+with open (input_path, 'r', encoding='utf8') as election_file:
+    election_reader = csv_reader(election_file, delimiter=",")
+
+election_header = next(election_reader)
+for row in election_reader:
+    
+    votes=votes + 1
 
 
 
 
+#Acomplete list of candidates who received votes 
 
-total_votes = total_votes + 1
-#Acomplete list of candidates who received votes (candidates)
+
 # loop thru names and append name in a dictionary if not in list already
 
 
+    if row[2] not in candidate_list:
+        candidate_list.append(row[2])
 
 
 #The percentage of votes each candidate won
@@ -33,11 +42,34 @@ total_votes = total_votes + 1
 
 #The total number of votes each candidate won
 
+    for candidate in candidate_list:
+        candidate_count.append(votes.count(candidate))
+        vote_pct.append(round(votes.count(candidate)/votes*100,3))
+
 
 #The winner of the election based on popular vote
-# create a candidate list and get teh max as rthe winner
+
+winner = max(set(candidate_list), key=candidate_list.count)
 
 
+# Print the results
+print('Election Resuls')
+print('-------------------------')
+print(f'Total Votes: {votes}')
+print('-------------------------')
+for i in range(len(candidate_list)):
+    print(f'{candidate_list[i]}: {vote_pct[i]}% ({candidate_count[i]})')
+print('-------------------------')
+print(f'Winner: {winner}')
+print('-------------------------')
 
-
-#
+with open(output_path, "w") as txt_file:
+    txt_file.write('Election Resuls')
+    txt_file.write('\n-------------------------')
+    txt_file.write(f'\nTotal Votes: {votes}')
+    txt_file.write('\n-------------------------')
+    for i in range(len(candidate_list)):
+        txt_file.write(f'\n{candidate_list[i]}: {vote_pct[i]}% ({candidate_count[i]})')
+    txt_file.write('\n-------------------------')
+    txt_file.write(f'\nWinner: {winner}')
+    txt_file.write('\n-------------------------')
